@@ -233,7 +233,7 @@ static inline int nvme_pcicfg_write32(struct pci_device *dev,
 static inline int nvme_pcicfg_map_bar(void *devhandle, unsigned int bar,
 				      bool read_only, void **mapped_addr)
 {
-	struct pci_device *dev = devhandle;
+	struct pci_device *dev = (struct pci_device*)devhandle;
 	uint32_t flags = (read_only ? 0 : PCI_DEV_MAP_FLAG_WRITABLE);
 
 	return pci_device_map_range(dev, dev->regions[bar].base_addr,
@@ -247,7 +247,7 @@ static inline int nvme_pcicfg_map_bar_write_combine(void *devhandle,
 						    unsigned int bar,
 						    void **mapped_addr)
 {
-	struct pci_device *dev = devhandle;
+	struct pci_device *dev = (struct pci_device*)devhandle;
 	uint32_t flags = PCI_DEV_MAP_FLAG_WRITABLE |
 		PCI_DEV_MAP_FLAG_WRITE_COMBINE;
 
@@ -261,7 +261,7 @@ static inline int nvme_pcicfg_map_bar_write_combine(void *devhandle,
 static inline int nvme_pcicfg_unmap_bar(void *devhandle, unsigned int bar,
 					void *addr)
 {
-	struct pci_device *dev = devhandle;
+	struct pci_device *dev = (struct pci_device*)devhandle;
 
 	return pci_device_unmap_range(dev, addr, dev->regions[bar].size);
 }
@@ -273,7 +273,7 @@ static inline void nvme_pcicfg_get_bar_addr_len(void *devhandle,
 						unsigned int bar,
 						uint64_t *addr, uint64_t *size)
 {
-	struct pci_device *dev = devhandle;
+	struct pci_device *dev = (struct pci_device *)devhandle;
 
 	*addr = (uint64_t)dev->regions[bar].base_addr;
 	*size = (uint64_t)dev->regions[bar].size;
