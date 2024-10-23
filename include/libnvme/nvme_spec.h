@@ -789,7 +789,7 @@ enum nvme_data_transfer {
  */
 static inline enum nvme_data_transfer nvme_opc_get_data_transfer(uint8_t opc)
 {
-	return opc & 3;
+	return (enum nvme_data_transfer)(opc & (uint8_t)3);
 }
 
 /*

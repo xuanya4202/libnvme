@@ -32,6 +32,7 @@
  */
 
 #include "nvme_internal.h"
+#include "nvme_pci.h"
 
 /*
  * Host software shall wait a minimum of CAP.TO x 500 milleseconds for CSTS.RDY
@@ -796,8 +797,14 @@ static int nvme_ctrlr_map_bars(struct nvme_ctrlr *ctrlr)
 {
 	void *addr;
 	int ret;
+  char bdf[32];
 
-	ret = nvme_pcicfg_map_bar(ctrlr->pci_dev, 0, 0, &addr);
+	//ret = nvme_pcicfg_map_bar(ctrlr->pci_dev, 0, 0, &addr);
+  // todo mmap
+  memset(bdf, 0, 32);
+  snprintf(bdf, 32, "%04x:%02x:%02x.%1u", ctrlr->pci_dev->domain,
+           ctrlr->pci_dev->bus, ctrlr->pci_dev->dev, ctrlr->pci_dev->func);
+  ret = mynvme_pcicfg_map_bar(bdf, 0, 0, &addr);
 	if (ret != 0 || addr == NULL) {
 		nvme_err("Map PCI device bar failed %d (%s)\n",
 			 ret, strerror(ret));

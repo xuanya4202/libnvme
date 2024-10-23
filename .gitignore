@@ -63,3 +63,9 @@ libtool
 libnvme.pc
 .libs
 .dirstamp
+
+### PreCI ###
+.codecc
+.vscode
+.m4
+build/
